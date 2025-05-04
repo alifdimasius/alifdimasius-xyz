@@ -30,7 +30,7 @@ RUN addgroup --system --gid 1001 nodejs \
     && adduser --system --uid 1001 nextjs
 
 # Copy only necessary files from the builder stage
-COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
