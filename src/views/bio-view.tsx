@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import Image from "next/image";
@@ -16,88 +16,118 @@ export function BioView() {
   const [pageDirection, setPageDirection] = useState(0); // 1 for down, -1 for up
   const [isNavigating, setIsNavigating] = useState(false);
   const [clickedLink, setClickedLink] = useState("");
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const imagesLoadedCount = useRef(0);
+  const totalImages = 3; // Mountain, VibrantSolemn, Lights
+
+  // Track image loading completion
+  const handleImageLoaded = () => {
+    imagesLoadedCount.current += 1;
+    if (imagesLoadedCount.current >= totalImages) {
+      setImagesLoaded(true);
+    }
+  };
 
   useEffect(() => {
     // Force scroll to top on component mount
     window.scrollTo(0, 0);
 
-    // Optional: prevent scrolling during initial animations
+    // Prevent scrolling during initial animations
     document.body.style.overflow = "hidden";
 
+    // Use a two-phase approach for more reliable timing
+    const timer1 = setTimeout(() => {
+      setPageLoaded(true);
+    }, 150); // Small delay to ensure DOM is ready
+
     // Re-enable scrolling after animations complete
-    const timer = setTimeout(() => {
+    const timer2 = setTimeout(() => {
       document.body.style.overflow = "";
     }, 1500);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
       document.body.style.overflow = "";
     };
   }, []);
 
-  // Animation variants
+  // Animation variants with improved cross-browser consistency
   const containerVariants = {
     hidden: (direction: number) => ({
       opacity: 0,
-      y: 300, // Start from bottom for initial load
+      y: 50, // Reduced for smoother entry
+      transition: {
+        type: "spring",
+        duration: 0.5,
+      },
     }),
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         when: "beforeChildren",
-        staggerChildren: 0.2,
+        staggerChildren: 0.12, // Reduced stagger time
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100, // Lower for consistency
+        damping: 20,
+        duration: 0.7,
       },
     },
     exit: (direction: number) => ({
-      y: -100, // Always exit upward
+      y: -50, // Reduced for smoother exit
       opacity: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.5,
       },
     }),
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 20, opacity: 0 }, // Reduced from 30
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 400,
-        damping: 20,
+        stiffness: 100,
+        damping: 15,
+        duration: 0.5,
       },
     },
   };
 
-  // Navigation transition variants
+  // Navigation transition variants - simplified
   const pageVariants = {
     initial: (direction: any) => ({
-      y: direction > 0 ? 300 : -300,
+      y: direction > 0 ? 50 : -50, // Reduced from 300
       opacity: 0,
+      transition: {
+        duration: 0.3,
+      },
     }),
     animate: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.7,
       },
     },
     exit: (direction: any) => ({
-      y: direction > 0 ? -300 : 300,
+      y: direction > 0 ? -50 : 50,
       opacity: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.5,
       },
     }),
   };
@@ -106,7 +136,7 @@ export function BioView() {
   const navItems = [
     { label: "create", path: "/" },
     { label: "bio", path: "/bio" },
-    { label: "contact", path: "mailto:anemail@email.com" },
+    { label: "contact", path: "mailto:alifdimasius@gmail.com" },
   ];
 
   const handleNavClick = (navItem: string) => {
@@ -115,7 +145,7 @@ export function BioView() {
 
     // Special handling for mailto links
     if (navItem === "contact") {
-      window.location.href = "mailto:anemail@email.com";
+      window.location.href = "mailto:alifdimasius@gmail.com";
       return;
     }
 
@@ -141,8 +171,11 @@ export function BioView() {
   const routes = {
     create: "/",
     bio: "/bio",
-    contact: "mailto:anemail@email.com",
+    contact: "mailto:alifdimasius@gmail.com",
   };
+
+  // Animation ready state - only animate when everything is properly loaded
+  const animationReady = pageLoaded && !isNavigating;
 
   return (
     <div className="w-full relative">
@@ -156,7 +189,7 @@ export function BioView() {
           }
         }}
       >
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
             key="main-container"
             className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 w-full relative overflow-hidden"
@@ -297,29 +330,29 @@ export function BioView() {
       </AnimatePresence>
 
       <AnimatePresence mode="wait" custom={pageDirection}>
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
             className="grid grid-cols-3 gap-2 mt-2"
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 30 }} // Reduced from 50
             animate={{
               opacity: 1,
               y: 0,
               transition: {
-                delay: 0.3,
+                delay: 0.2, // Slight delay for sequence
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
+                stiffness: 100,
+                damping: 20,
                 when: "beforeChildren",
-                staggerChildren: 0.1,
+                staggerChildren: 0.08,
               },
             }}
             exit={{
               opacity: 0,
-              y: -50,
+              y: -30, // Reduced from -50
               transition: {
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
+                stiffness: 100,
+                damping: 20,
                 when: "afterChildren",
                 staggerChildren: 0.05,
                 staggerDirection: -1,
@@ -330,13 +363,18 @@ export function BioView() {
             <motion.div
               className="overflow-hidden rounded-2xl"
               variants={{
-                hidden: { y: 30, opacity: 0 },
+                hidden: { y: 20, opacity: 0 }, // Reduced from 30
                 visible: {
                   y: 0,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.5,
+                  },
                 },
-                exit: { y: -20, opacity: 0, transition: { duration: 0.2 } },
+                exit: { y: -10, opacity: 0, transition: { duration: 0.2 } }, // Reduced from -20
               }}
               initial="hidden"
               animate="visible"
@@ -352,23 +390,26 @@ export function BioView() {
                 height={1600}
                 width={900}
                 className="rounded-2xl w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                onLoad={handleImageLoaded}
+                priority
               />
             </motion.div>
             <motion.div
               className="overflow-hidden rounded-2xl"
               variants={{
-                hidden: { y: 30, opacity: 0 },
+                hidden: { y: 20, opacity: 0 },
                 visible: {
                   y: 0,
                   opacity: 1,
                   transition: {
                     type: "spring",
-                    stiffness: 400,
-                    damping: 20,
-                    delay: 0.1,
+                    stiffness: 100,
+                    damping: 15,
+                    delay: 0.05, // Reduced from 0.1
+                    duration: 0.5,
                   },
                 },
-                exit: { y: -20, opacity: 0, transition: { duration: 0.2 } },
+                exit: { y: -10, opacity: 0, transition: { duration: 0.2 } },
               }}
               initial="hidden"
               animate="visible"
@@ -384,23 +425,26 @@ export function BioView() {
                 height={1600}
                 width={900}
                 className="rounded-2xl w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                onLoad={handleImageLoaded}
+                priority
               />
             </motion.div>
             <motion.div
               className="overflow-hidden rounded-2xl"
               variants={{
-                hidden: { y: 30, opacity: 0 },
+                hidden: { y: 20, opacity: 0 },
                 visible: {
                   y: 0,
                   opacity: 1,
                   transition: {
                     type: "spring",
-                    stiffness: 400,
-                    damping: 20,
-                    delay: 0.2,
+                    stiffness: 100,
+                    damping: 15,
+                    delay: 0.1, // Reduced from 0.2
+                    duration: 0.5,
                   },
                 },
-                exit: { y: -20, opacity: 0, transition: { duration: 0.2 } },
+                exit: { y: -10, opacity: 0, transition: { duration: 0.2 } },
               }}
               initial="hidden"
               animate="visible"
@@ -416,6 +460,8 @@ export function BioView() {
                 height={1600}
                 width={900}
                 className="rounded-2xl w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                onLoad={handleImageLoaded}
+                priority
               />
             </motion.div>
           </motion.div>
@@ -424,7 +470,7 @@ export function BioView() {
 
       {/* Contact / Footer Section */}
       <AnimatePresence mode="wait" custom={pageDirection}>
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
             key="footer-container"
             className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 mt-2 w-full relative overflow-hidden"

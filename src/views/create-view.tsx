@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +21,18 @@ export function CreateView() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [clickedLink, setClickedLink] = useState("");
   const [hoveredFooterNav, setHoveredFooterNav] = useState<string | null>(null);
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const imagesLoadedCount = useRef(0);
+  const totalImages = 8; // Total number of logos we're loading
+
+  // Track image loading completion
+  const handleImageLoaded = () => {
+    imagesLoadedCount.current += 1;
+    if (imagesLoadedCount.current >= totalImages) {
+      setImagesLoaded(true);
+    }
+  };
 
   useEffect(() => {
     // Force scroll to top on component mount
@@ -29,89 +41,107 @@ export function CreateView() {
     // Optional: prevent scrolling during initial animations
     document.body.style.overflow = "hidden";
 
+    // More reliable animation timing with a two-phase approach
+    const timer1 = setTimeout(() => {
+      setPageLoaded(true);
+    }, 150); // Small delay to ensure DOM is ready
+
     // Re-enable scrolling after animations complete (adjust timing as needed)
-    const timer = setTimeout(() => {
+    const timer2 = setTimeout(() => {
       document.body.style.overflow = "";
     }, 1500);
 
     return () => {
-      clearTimeout(timer);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
       document.body.style.overflow = "";
     };
   }, []);
 
-  // Animation variants
+  // Animation variants with more reliable timing
   const containerVariants = {
     hidden: (direction: number) => ({
       opacity: 0,
-      y: 100, // Reduced from 300 to minimize layout shifts
+      y: 50, // Reduced from 100 for smoother entry
+      transition: {
+        type: "spring",
+        duration: 0.5,
+      },
     }),
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         when: "beforeChildren",
-        staggerChildren: 0.2,
+        staggerChildren: 0.12, // Reduced from 0.2 for more consistent timing
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100, // Reduced for more consistent behavior
+        damping: 20, // Adjusted for cross-browser consistency
+        duration: 0.7,
       },
     },
     exit: (direction: number) => ({
-      y: -100, // Always exit upward
+      y: -50, // Reduced for smoother exit
       opacity: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.5,
       },
     }),
   };
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 20, opacity: 0 }, // Reduced from 30
     visible: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 400,
-        damping: 20,
+        stiffness: 100, // Lower value for consistency
+        damping: 15,
+        duration: 0.5,
       },
     },
   };
 
-  // Navigation transition variants
+  // Navigation transition variants - simplified for consistency
   const pageVariants = {
     initial: (direction: any) => ({
-      y: direction > 0 ? 300 : -300,
+      y: direction > 0 ? 50 : -50, // Reduced from 300
       opacity: 0,
+      transition: {
+        duration: 0.3,
+      },
     }),
     animate: {
       y: 0,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.7,
       },
     },
     exit: (direction: any) => ({
-      y: direction > 0 ? -300 : 300,
+      y: direction > 0 ? -50 : 50, // Reduced
       opacity: 0,
       transition: {
         type: "spring",
-        stiffness: 300,
-        damping: 30,
+        stiffness: 100,
+        damping: 20,
+        duration: 0.5,
       },
     }),
   };
 
   // Navigation items that will be passed to CircularBurger
   const navItems = [
-    { label: "create" },
-    { label: "bio" },
-    { label: "contact" },
+    { label: "create", path: "/" },
+    { label: "bio", path: "/bio" },
+    { label: "contact", path: "mailto:alifdimasius@gmail.com" },
   ];
 
   const handleNavClick = (navItem: string) => {
@@ -120,7 +150,7 @@ export function CreateView() {
 
     // Special handling for mailto links
     if (navItem === "contact") {
-      window.location.href = "mailto:anemail@email.com";
+      window.location.href = "mailto:alifdimasius@gmail.com";
       return;
     }
 
@@ -146,8 +176,11 @@ export function CreateView() {
   const routes = {
     create: "/",
     bio: "/bio",
-    contact: "mailto:anemail@email.com",
+    contact: "mailto:alifdimasius@gmail.com",
   };
+
+  // Animation ready state - only animate when everything is properly loaded
+  const animationReady = pageLoaded && !isNavigating;
 
   return (
     <div className="w-full relative">
@@ -161,7 +194,7 @@ export function CreateView() {
           }
         }}
       >
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
             key="main-container"
             className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 w-full relative overflow-hidden"
@@ -189,51 +222,55 @@ export function CreateView() {
               <div>
                 {/* Navigation */}
                 <div className="flex items-center gap-5">
-                  {navItems.slice(0, 4).map((item, index) => (
-                    <motion.div
+                  {navItems.map((item, index) => (
+                    <Link
                       key={item.label}
-                      onClick={() => handleNavClick(item.label)}
-                      className={`relative cursor-pointer ${
+                      href={item.path}
+                      onClick={(e) => {
+                        // Prevent default Next.js navigation
+                        e.preventDefault();
+                        handleNavClick(item.label);
+                      }}
+                      className={`relative cursor-pointer group flex items-center ${
                         currentNav === item.label
                           ? "text-black"
                           : "text-gray-500"
                       }`}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onHoverStart={() => setHoveredNav(item.label)}
-                      onHoverEnd={() => setHoveredNav(null)}
                     >
-                      {/* We hide the actual link but it's there for SEO */}
-                      <Link
-                        href={routes[item.label as keyof typeof routes]}
-                        style={{ display: "none" }}
-                        aria-hidden="true"
-                        tabIndex={-1}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: 0.15 + index * 0.05,
+                          duration: 0.3,
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onHoverStart={() => setHoveredNav(item.label)}
+                        onHoverEnd={() => setHoveredNav(null)}
+                        className="flex items-center"
                       >
-                        {item.label}
-                      </Link>
-                      <p>{item.label}</p>
-                      {(hoveredNav === item.label ||
-                        (hoveredNav === null && currentNav === item.label)) && (
-                        <motion.div
-                          className={`absolute bottom-0 left-0 w-full h-0.5 ${
-                            hoveredNav === item.label
-                              ? "bg-gray-500"
-                              : "bg-black"
-                          }`}
-                          layoutId="navIndicator"
-                          initial={false}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-                    </motion.div>
+                        <p>{item.label}</p>
+                        {(hoveredNav === item.label ||
+                          (hoveredNav === null &&
+                            currentNav === item.label)) && (
+                          <motion.div
+                            className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                              hoveredNav === item.label
+                                ? "bg-gray-500"
+                                : "bg-black"
+                            }`}
+                            layoutId="navIndicator"
+                            initial={false}
+                            transition={{
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                      </motion.div>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -291,7 +328,6 @@ export function CreateView() {
               animate={{ opacity: 0.05 }}
               transition={{ delay: 0.7, duration: 0.5 }}
             >
-              {/* <Image src={LogoUrl} alt="Logo" width={20} height={20} /> */}
               <Logo height={40} className="opacity-50" />
             </motion.div>
           </motion.div>
@@ -300,29 +336,29 @@ export function CreateView() {
 
       {/* Start of Project Cards Section */}
       <AnimatePresence mode="wait" custom={pageDirection}>
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
-            className="grid grid-cols-4 gap-2 w-full text-xs text-gray-500 uppercase mt-2  h-[30rem]"
-            initial={{ opacity: 0, y: 100 }}
+            className="grid grid-cols-4 gap-2 w-full text-xs text-gray-500 uppercase mt-2 h-[30rem]"
+            initial={{ opacity: 0, y: 50 }} // Reduced from 100
             animate={{
               opacity: 1,
               y: 0,
               transition: {
-                delay: 0.3, // Delay slightly after main container animation starts
+                delay: 0.2, // Slight delay for sequence
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
+                stiffness: 100,
+                damping: 20,
                 when: "beforeChildren",
-                staggerChildren: 0.1,
+                staggerChildren: 0.08, // Reduced for consistency
               },
             }}
             exit={{
               opacity: 0,
-              y: -100,
+              y: -50, // Reduced
               transition: {
                 type: "spring",
-                stiffness: 300,
-                damping: 30,
+                stiffness: 100,
+                damping: 20,
                 when: "afterChildren",
                 staggerChildren: 0.05,
                 staggerDirection: -1,
@@ -333,16 +369,21 @@ export function CreateView() {
             <motion.div
               className="bg-white h-full rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
               variants={{
-                hidden: { y: 50, opacity: 0 },
+                hidden: { y: 30, opacity: 0 },
                 visible: {
                   y: 0,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.5,
+                  },
                 },
                 exit: {
                   y: -20,
                   opacity: 0,
-                  transition: { duration: 0.2 },
+                  transition: { duration: 0.3 },
                 },
               }}
               initial="hidden"
@@ -356,6 +397,7 @@ export function CreateView() {
                 width={150}
                 height={150}
                 className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                onLoad={handleImageLoaded}
               />
             </motion.div>
 
@@ -366,12 +408,17 @@ export function CreateView() {
                 visible: {
                   y: 0,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.5,
+                  },
                 },
                 exit: {
                   y: -20,
                   opacity: 0,
-                  transition: { duration: 0.2 },
+                  transition: { duration: 0.3 },
                 },
               }}
               initial="hidden"
@@ -381,16 +428,21 @@ export function CreateView() {
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -404,21 +456,27 @@ export function CreateView() {
                   width={150}
                   height={150}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -432,6 +490,7 @@ export function CreateView() {
                   width={115}
                   height={115}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
             </motion.div>
@@ -443,12 +502,17 @@ export function CreateView() {
                 visible: {
                   y: 0,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.5,
+                  },
                 },
                 exit: {
                   y: -20,
                   opacity: 0,
-                  transition: { duration: 0.2 },
+                  transition: { duration: 0.3 },
                 },
               }}
               initial="hidden"
@@ -458,16 +522,21 @@ export function CreateView() {
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -481,21 +550,27 @@ export function CreateView() {
                   width={90}
                   height={90}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -509,6 +584,7 @@ export function CreateView() {
                   width={100}
                   height={100}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
             </motion.div>
@@ -520,12 +596,17 @@ export function CreateView() {
                 visible: {
                   y: 0,
                   opacity: 1,
-                  transition: { type: "spring", stiffness: 400, damping: 20 },
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.5,
+                  },
                 },
                 exit: {
                   y: -20,
                   opacity: 0,
-                  transition: { duration: 0.2 },
+                  transition: { duration: 0.3 },
                 },
               }}
               initial="hidden"
@@ -535,16 +616,21 @@ export function CreateView() {
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -558,21 +644,27 @@ export function CreateView() {
                   width={50}
                   height={50}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -586,21 +678,27 @@ export function CreateView() {
                   width={100}
                   height={100}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
               <motion.div
                 className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
                 variants={{
-                  hidden: { y: 50, opacity: 0 },
+                  hidden: { y: 30, opacity: 0 },
                   visible: {
                     y: 0,
                     opacity: 1,
-                    transition: { type: "spring", stiffness: 400, damping: 20 },
+                    transition: {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 15,
+                      duration: 0.5,
+                    },
                   },
                   exit: {
                     y: -20,
                     opacity: 0,
-                    transition: { duration: 0.2 },
+                    transition: { duration: 0.3 },
                   },
                 }}
                 initial="hidden"
@@ -614,6 +712,7 @@ export function CreateView() {
                   width={100}
                   height={100}
                   className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
+                  onLoad={handleImageLoaded}
                 />
               </motion.div>
             </motion.div>
@@ -624,7 +723,7 @@ export function CreateView() {
 
       {/* Contact / Footer Section */}
       <AnimatePresence mode="wait" custom={pageDirection}>
-        {!isNavigating && (
+        {animationReady && (
           <motion.div
             key="footer-container"
             className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 mt-2 w-full relative overflow-hidden"
@@ -662,54 +761,57 @@ export function CreateView() {
                 </motion.p>
               </div>
               <div>
-                {/* Footer Navigation with separate hover state */}
+                {/* Footer Navigation */}
                 <div className="flex items-center gap-5">
-                  {navItems.slice(0, 4).map((item, index) => (
-                    <motion.div
+                  {navItems.map((item, index) => (
+                    <Link
                       key={`footer-${item.label}`}
-                      onClick={() => handleNavClick(item.label)}
-                      className={`relative cursor-pointer ${
+                      href={item.path}
+                      onClick={(e) => {
+                        // Prevent default Next.js navigation
+                        e.preventDefault();
+                        handleNavClick(item.label);
+                      }}
+                      className={`relative cursor-pointer group flex items-center ${
                         currentNav === item.label
                           ? "text-black"
                           : "text-gray-500"
                       }`}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.15 + index * 0.05, duration: 0.3 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      onHoverStart={() => setHoveredFooterNav(item.label)}
-                      onHoverEnd={() => setHoveredFooterNav(null)}
                     >
-                      {/* We hide the actual link but it's there for SEO */}
-                      <Link
-                        href={routes[item.label as keyof typeof routes]}
-                        style={{ display: "none" }}
-                        aria-hidden="true"
-                        tabIndex={-1}
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: 0.15 + index * 0.05,
+                          duration: 0.3,
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.95 }}
+                        onHoverStart={() => setHoveredFooterNav(item.label)}
+                        onHoverEnd={() => setHoveredFooterNav(null)}
+                        className="flex items-center"
                       >
-                        {item.label}
-                      </Link>
-                      <p>{item.label}</p>
-                      {(hoveredFooterNav === item.label ||
-                        (hoveredFooterNav === null &&
-                          currentNav === item.label)) && (
-                        <motion.div
-                          className={`absolute bottom-0 left-0 w-full h-0.5 ${
-                            hoveredFooterNav === item.label
-                              ? "bg-gray-500"
-                              : "bg-black"
-                          }`}
-                          layoutId="footerNavIndicator" // Different layoutId for footer
-                          initial={false}
-                          transition={{
-                            type: "spring",
-                            stiffness: 500,
-                            damping: 30,
-                          }}
-                        />
-                      )}
-                    </motion.div>
+                        <p>{item.label}</p>
+                        {(hoveredFooterNav === item.label ||
+                          (hoveredFooterNav === null &&
+                            currentNav === item.label)) && (
+                          <motion.div
+                            className={`absolute bottom-0 left-0 w-full h-0.5 ${
+                              hoveredFooterNav === item.label
+                                ? "bg-gray-500"
+                                : "bg-black"
+                            }`}
+                            layoutId="footerNavIndicator"
+                            initial={false}
+                            transition={{
+                              type: "spring",
+                              stiffness: 500,
+                              damping: 30,
+                            }}
+                          />
+                        )}
+                      </motion.div>
+                    </Link>
                   ))}
                 </div>
               </div>
