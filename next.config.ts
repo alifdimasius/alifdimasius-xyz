@@ -12,6 +12,8 @@ const nextConfig: NextConfig = {
     },
   },
 
+  output: "standalone",
+
   // Config for SVG React
   webpack(config) {
     // Grab the existing rule that handles SVG imports
