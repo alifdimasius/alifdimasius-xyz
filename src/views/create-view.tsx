@@ -22,6 +22,7 @@ export function CreateView() {
   const [clickedLink, setClickedLink] = useState("");
   const [hoveredFooterNav, setHoveredFooterNav] = useState<string | null>(null);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [animationsReady, setAnimationsReady] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const imagesLoadedCount = useRef(0);
   const totalImages = 8; // Total number of logos we're loading
@@ -38,22 +39,28 @@ export function CreateView() {
     // Force scroll to top on component mount
     window.scrollTo(0, 0);
 
-    // Optional: prevent scrolling during initial animations
+    // Prevent scrolling during initial animations
     document.body.style.overflow = "hidden";
 
-    // More reliable animation timing with a two-phase approach
+    // Set a longer delay for animations as per user feedback (700ms)
     const timer1 = setTimeout(() => {
       setPageLoaded(true);
-    }, 150); // Small delay to ensure DOM is ready
+    }, 100); // First detect DOM ready
 
-    // Re-enable scrolling after animations complete (adjust timing as needed)
+    // Then wait longer before allowing animations to start
     const timer2 = setTimeout(() => {
+      setAnimationsReady(true);
+    }, 700); // Critical delay for Chrome compatibility
+
+    // Re-enable scrolling after animations complete
+    const timer3 = setTimeout(() => {
       document.body.style.overflow = "";
-    }, 1500);
+    }, 2000);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
       document.body.style.overflow = "";
     };
   }, []);
@@ -180,10 +187,12 @@ export function CreateView() {
   };
 
   // Animation ready state - only animate when everything is properly loaded
-  const animationReady = pageLoaded && !isNavigating;
+  // Updated to include the longer delay from animationsReady
+  const animationReady = pageLoaded && animationsReady && !isNavigating;
 
   return (
     <div className="w-full relative">
+      {/* Rest of the content - only visible when animationReady is true */}
       <AnimatePresence
         mode="wait"
         custom={pageDirection}

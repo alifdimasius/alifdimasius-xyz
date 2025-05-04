@@ -17,6 +17,7 @@ export function BioView() {
   const [isNavigating, setIsNavigating] = useState(false);
   const [clickedLink, setClickedLink] = useState("");
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [animationsReady, setAnimationsReady] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const imagesLoadedCount = useRef(0);
   const totalImages = 3; // Mountain, VibrantSolemn, Lights
@@ -36,19 +37,25 @@ export function BioView() {
     // Prevent scrolling during initial animations
     document.body.style.overflow = "hidden";
 
-    // Use a two-phase approach for more reliable timing
+    // Set a longer delay for animations as per user feedback (700ms)
     const timer1 = setTimeout(() => {
       setPageLoaded(true);
-    }, 150); // Small delay to ensure DOM is ready
+    }, 100); // First detect DOM ready
+
+    // Then wait longer before allowing animations to start
+    const timer2 = setTimeout(() => {
+      setAnimationsReady(true);
+    }, 700); // Critical delay for Chrome compatibility
 
     // Re-enable scrolling after animations complete
-    const timer2 = setTimeout(() => {
+    const timer3 = setTimeout(() => {
       document.body.style.overflow = "";
-    }, 1500);
+    }, 2000);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
+      clearTimeout(timer3);
       document.body.style.overflow = "";
     };
   }, []);
@@ -175,10 +182,26 @@ export function BioView() {
   };
 
   // Animation ready state - only animate when everything is properly loaded
-  const animationReady = pageLoaded && !isNavigating;
+  // Updated to include the longer delay from animationsReady
+  const animationReady = pageLoaded && animationsReady && !isNavigating;
 
   return (
     <div className="w-full relative">
+      {/* Optional loading indicator that shows while animationsReady is false */}
+      {/*
+      <AnimatePresence>
+        {pageLoaded && !animationsReady && (
+          <motion.div
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-white z-50 flex items-center justify-center"
+          >
+
+          </motion.div>
+        )}
+      </AnimatePresence>
+      */}
+
       <AnimatePresence
         mode="wait"
         custom={pageDirection}
