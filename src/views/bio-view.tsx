@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import Image from "next/image";
 import Logo from "@/assets/logo.svg";
+import { NavigationLinks } from "@/components/navigation";
 import Mountain from "@/assets/mountain.webp";
 import VibrantSolemn from "@/assets/vibrant_solemn.webp";
 import Lights from "@/assets/lights.webp";
@@ -139,13 +139,6 @@ export function BioView() {
     }),
   };
 
-  // Navigation items that will be passed to CircularBurger
-  const navItems = [
-    { label: "create", path: "/" },
-    { label: "bio", path: "/bio" },
-    { label: "contact", path: "mailto:alifdimasius@gmail.com" },
-  ];
-
   const handleNavClick = (navItem: string) => {
     // Skip if already navigating or clicking the current nav
     if (isNavigating || navItem === currentNav) return;
@@ -155,6 +148,13 @@ export function BioView() {
       window.location.href = "mailto:alifdimasius@gmail.com";
       return;
     }
+
+    // Navigation items for direction calculation
+    const navItems = [
+      { label: "create", path: "/" },
+      { label: "bio", path: "/bio" },
+      { label: "contact", path: "mailto:alifdimasius@gmail.com" },
+    ];
 
     // Determine direction based on the current and next nav items
     const currentIndex = navItems.findIndex(
@@ -215,7 +215,7 @@ export function BioView() {
         {animationReady && (
           <motion.div
             key="main-container"
-            className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 w-full relative overflow-hidden"
+            className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-60 lg:h-80 w-full relative overflow-hidden"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -229,7 +229,7 @@ export function BioView() {
             >
               <div>
                 <motion.p
-                  className="text-3xl"
+                  className="texl-xl lg:text-3xl"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1, duration: 0.3 }}
@@ -239,58 +239,13 @@ export function BioView() {
               </div>
               <div>
                 {/* Navigation */}
-                <div className="flex items-center gap-5">
-                  {navItems.map((item, index) => (
-                    <Link
-                      key={item.label}
-                      href={item.path}
-                      onClick={(e) => {
-                        // Prevent default Next.js navigation
-                        e.preventDefault();
-                        handleNavClick(item.label);
-                      }}
-                      className={`relative cursor-pointer group flex items-center ${
-                        currentNav === item.label
-                          ? "text-black"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: 0.15 + index * 0.05,
-                          duration: 0.3,
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onHoverStart={() => setHoveredNav(item.label)}
-                        onHoverEnd={() => setHoveredNav(null)}
-                        className="flex items-center"
-                      >
-                        <p>{item.label}</p>
-                        {(hoveredNav === item.label ||
-                          (hoveredNav === null &&
-                            currentNav === item.label)) && (
-                          <motion.div
-                            className={`absolute bottom-0 left-0 w-full h-0.5 ${
-                              hoveredNav === item.label
-                                ? "bg-gray-500"
-                                : "bg-black"
-                            }`}
-                            layoutId="navIndicator"
-                            initial={false}
-                            transition={{
-                              type: "spring",
-                              stiffness: 500,
-                              damping: 30,
-                            }}
-                          />
-                        )}
-                      </motion.div>
-                    </Link>
-                  ))}
-                </div>
+                <NavigationLinks
+                  currentNav={currentNav}
+                  hoveredNav={hoveredNav}
+                  setHoveredNav={setHoveredNav}
+                  handleNavClick={handleNavClick}
+                  layoutId="navIndicator"
+                />
               </div>
             </motion.div>
 
@@ -298,7 +253,7 @@ export function BioView() {
             <AnimatePresence mode="wait" custom={pageDirection}>
               <motion.div
                 key={currentNav}
-                className="text-xl"
+                className="text-sm lg:text-xl"
                 variants={pageVariants}
                 initial="initial"
                 animate="animate"
@@ -496,7 +451,7 @@ export function BioView() {
         {animationReady && (
           <motion.div
             key="footer-container"
-            className="bg-white p-5 rounded-2xl font-semibold text-lg flex flex-col justify-between h-80 mt-2 w-full relative overflow-hidden"
+            className="bg-white p-5 rounded-2xl font-semibold flex flex-col justify-between h-60 lg:h-80 mt-2 w-full relative overflow-hidden"
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -507,7 +462,7 @@ export function BioView() {
               className="flex justify-between"
               variants={itemVariants}
             >
-              <div className="text-2xl">
+              <div className="hidden lg:block text-sm lg:text-2xl">
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -519,79 +474,62 @@ export function BioView() {
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.3 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
                 >
                   Who are you? And what do you want?
                 </motion.p>
                 <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.3 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
                 >
                   - Uncle Iroh from Avatar: The Last Airbender
                 </motion.p>
               </div>
+              <div className="block lg:hidden text-sm lg:text-2xl"></div>
               <div>
-                {/* Footer Navigation with separate hover state */}
-                <div className="flex items-center gap-5">
-                  {navItems.map((item, index) => (
-                    <Link
-                      key={`footer-${item.label}`}
-                      href={item.path}
-                      onClick={(e) => {
-                        // Prevent default Next.js navigation
-                        e.preventDefault();
-                        handleNavClick(item.label);
-                      }}
-                      className={`relative cursor-pointer group flex items-center ${
-                        currentNav === item.label
-                          ? "text-black"
-                          : "text-gray-500"
-                      }`}
-                    >
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: 0.15 + index * 0.05,
-                          duration: 0.3,
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onHoverStart={() => setHoveredFooterNav(item.label)}
-                        onHoverEnd={() => setHoveredFooterNav(null)}
-                        className="flex items-center"
-                      >
-                        <p>{item.label}</p>
-                        {(hoveredFooterNav === item.label ||
-                          (hoveredFooterNav === null &&
-                            currentNav === item.label)) && (
-                          <motion.div
-                            className={`absolute bottom-0 left-0 w-full h-0.5 ${
-                              hoveredFooterNav === item.label
-                                ? "bg-gray-500"
-                                : "bg-black"
-                            }`}
-                            layoutId="footerNavIndicator"
-                            initial={false}
-                            transition={{
-                              type: "spring",
-                              stiffness: 500,
-                              damping: 30,
-                            }}
-                          />
-                        )}
-                      </motion.div>
-                    </Link>
-                  ))}
-                </div>
+                {/* Footer Navigation */}
+                <NavigationLinks
+                  currentNav={currentNav}
+                  hoveredNav={hoveredFooterNav}
+                  setHoveredNav={setHoveredFooterNav}
+                  handleNavClick={handleNavClick}
+                  layoutId="footerNavIndicator"
+                />
+              </div>
+            </motion.div>
+
+            <motion.div>
+              <div className="block lg:hidden text-sm lg:text-2xl">
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  It's time for you to look inward, and start asking yourself
+                  the big questions.
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  Who are you? And what do you want?
+                </motion.p>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1, duration: 0.3 }}
+                >
+                  - Uncle Iroh from Avatar: The Last Airbender
+                </motion.p>
               </div>
             </motion.div>
 
             {/* Bottom Part */}
             <motion.div
               key="footer-content"
-              className="text-xl"
+              className="text-sm lg:text-xl"
               variants={pageVariants}
               initial="initial"
               animate="animate"
@@ -603,7 +541,7 @@ export function BioView() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.3 }}
               >
-                i'm based in Bali 🌴 and open to collaborations and projects.
+                i'm based in Bali and open to collaborations and projects.
               </motion.p>
             </motion.div>
 

@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${plusJakartaSans.variable} antialiased bg-system-gray m-16`}
+        className={`${plusJakartaSans.variable} antialiased bg-system-gray m-4 lg:m-16`}
       >
         {children}
         <SpeedInsights />

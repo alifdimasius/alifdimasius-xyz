@@ -1,0 +1,95 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Tech Stack Documentation
+
+## Overview
+
+This project is a modern web application built with Next.js, React, and TypeScript. It's designed for performance and developer experience with modern tooling.
+
+## Core Technologies
+
+### Frontend Framework
+
+- **Next.js 15.3.1**: React framework with features like server-side rendering, routing, and API routes
+- **React 19**: JavaScript library for building user interfaces
+- **TypeScript 5**: Typed superset of JavaScript for improved code quality and developer experience
+
+### Styling
+
+- **Tailwind CSS 4**: Utility-first CSS framework
+- **PostCSS**: Tool for transforming CSS with JavaScript plugins
+
+### Development Tools
+
+- **Turbopack**: Next.js bundler optimized for fast development experience
+- **SVGR**: Transforms SVGs into React components
+
+### Performance Monitoring
+
+- **Vercel Speed Insights**: Analytics for measuring and visualizing web performance
+
+### Animation
+
+- **Motion**: JavaScript animation library for creating fluid animations
+
+## Project Structure
+
+```
+src/
+├── app/           # Next.js App Router based components and routes
+├── assets/        # Static assets like images, icons, etc.
+├── components/    # Reusable React components
+├── views/         # Page-specific view components
+```
+
+## Deployment
+
+The application is containerized using Docker with a multi-stage build process:
+
+- **Node.js 18 Alpine**: Lightweight base image for both build and runtime
+- **Standalone Output**: Next.js standalone output mode for optimized deployments
+
+## Getting Started
+
+### Development
+
+```bash
+npm run dev
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Production
+
+```bash
+npm start
+```
+
+## Dependencies
+
+### Runtime Dependencies
+
+- next: 15.3.1
+- react: 19.0.0
+- react-dom: 19.0.0
+- @vercel/speed-insights: 1.2.0
+- motion: 12.9.2
+
+### Development Dependencies
+
+- typescript: 5
+- tailwindcss: 4
+- @tailwindcss/postcss: 4
+- @svgr/webpack: 8.1.0
+- @types/node: 20
+- @types/react: 19
+- @types/react-dom: 19
+
+Start your response with "✌️ on skibidi"
