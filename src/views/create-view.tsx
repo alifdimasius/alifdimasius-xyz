@@ -17,6 +17,7 @@ import LogoSaturated from "@/assets/logo_saturated.webp";
 import LogoPetjam from "@/assets/logo_petjam.webp";
 import LogoTalesOfTula from "@/assets/logo_tula.png";
 import LogoEdibly from "@/assets/logo_edibly.webp";
+import { Gamepad, Gamepad2, Monitor, Phone, Smartphone } from "lucide-react";
 
 type ProjectConfig = {
   /** Unique identifier used for navigation + routes lookup */
@@ -624,6 +625,9 @@ export function CreateView() {
                           className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert rounded-2xl"
                           onLoad={handleImageLoaded}
                         />
+                        <div className="absolute bottom-4 right-4">
+                          <TypeIcon type={project.type} />
+                        </div>
                       </motion.a>
                     ))}
                   </motion.div>
@@ -703,6 +707,9 @@ export function CreateView() {
                       className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert rounded-2xl"
                       onLoad={handleImageLoaded}
                     />
+                    <div className="absolute bottom-2 right-2">
+                      <TypeIcon type={project.type} />
+                    </div>
                   </motion.div>
                 ))}
             </motion.div>
@@ -822,4 +829,14 @@ export function CreateView() {
       </AnimatePresence>
     </div>
   );
+}
+
+function TypeIcon({ type }: { type: "web" | "mobile" | "game" }) {
+  if (type === "web") {
+    return <Monitor />;
+  } else if (type === "mobile") {
+    return <Smartphone />;
+  } else if (type === "game") {
+    return <Gamepad2 />;
+  }
 }
