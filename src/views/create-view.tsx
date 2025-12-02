@@ -13,6 +13,192 @@ import LogoDrowzee from "@/assets/logo_drowzee.webp";
 import LogoPanglima from "@/assets/logo_panglima.webp";
 import LogoKeythicc from "@/assets/logo_keythicc.webp";
 import LogoSibook from "@/assets/logo_sibook.webp";
+import LogoSaturated from "@/assets/logo_saturated.webp";
+import LogoPetjam from "@/assets/logo_petjam.webp";
+import LogoTalesOfTula from "@/assets/logo_tula.png";
+import LogoEdibly from "@/assets/logo_edibly.webp";
+
+type ProjectConfig = {
+  /** Unique identifier used for navigation + routes lookup */
+  key: string;
+  /** Label shown in UI */
+  label: string;
+  /** Href for the project detail page */
+  href: string;
+  /** Imported logo asset */
+  logo: { src: string };
+  /** Desktop grid column index (0–3) */
+  desktopColumn: 0 | 1 | 2 | 3;
+  /** Order within the column (top to bottom) */
+  desktopOrder: number;
+  /** Whether this project should appear in the mobile grid */
+  showOnMobile: boolean;
+  /** Order in the mobile grid (left‑to‑right, top‑to‑bottom) */
+  mobileOrder?: number;
+  /** Desktop logo dimensions */
+  desktopSize: { width: number; height: number };
+  /** Mobile logo dimensions */
+  mobileSize: { width: number; height: number };
+  type: "web" | "mobile" | "game";
+};
+
+const PROJECTS: ProjectConfig[] = [
+  {
+    key: "appa academy",
+    label: "appa academy",
+    href: "/projects/appa-academy",
+    logo: LogoAppa,
+    desktopColumn: 0,
+    desktopOrder: 0,
+    showOnMobile: true,
+    mobileOrder: 0,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 60, height: 60 },
+    type: "web",
+  },
+  {
+    key: "saturated",
+    label: "saturated",
+    href: "/projects/saturated",
+    logo: LogoSaturated,
+    desktopColumn: 0,
+    desktopOrder: 1,
+    showOnMobile: true,
+    mobileOrder: 1,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 60, height: 60 },
+    type: "game",
+  },
+  {
+    key: "tales of tula",
+    label: "tales of tula",
+    href: "/projects/tales-of-tula",
+    logo: LogoTalesOfTula,
+    desktopColumn: 0,
+    desktopOrder: 2,
+    showOnMobile: true,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 60, height: 60 },
+    type: "game",
+  },
+  {
+    key: "edibly",
+    label: "edibly",
+    href: "/projects/edibly",
+    logo: LogoEdibly,
+    desktopColumn: 1,
+    desktopOrder: 0,
+    showOnMobile: true,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 60, height: 60 },
+    type: "mobile",
+  },
+  {
+    key: "klop",
+    label: "klop",
+    href: "/projects/klop",
+    logo: LogoKlop,
+    desktopColumn: 1,
+    desktopOrder: 1,
+    showOnMobile: true,
+    mobileOrder: 1,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 80, height: 80 },
+    type: "web",
+  },
+  {
+    key: "petjam",
+    label: "petjam",
+    href: "/projects/petjam",
+    logo: LogoPetjam,
+    desktopColumn: 1,
+    desktopOrder: 2,
+    showOnMobile: true,
+    mobileOrder: 3,
+    desktopSize: { width: 150, height: 150 },
+    mobileSize: { width: 80, height: 80 },
+    type: "mobile",
+  },
+
+  {
+    key: "drowzee",
+    label: "drowzee",
+    href: "/projects/drowzee",
+    logo: LogoDrowzee,
+    desktopColumn: 2,
+    desktopOrder: 0,
+    showOnMobile: true,
+    mobileOrder: 3,
+    desktopSize: { width: 90, height: 90 },
+    mobileSize: { width: 60, height: 60 },
+    type: "mobile",
+  },
+  {
+    key: "finans",
+    label: "finans",
+    href: "/projects/finans",
+    logo: LogoFinans,
+    desktopColumn: 2,
+    desktopOrder: 1,
+    showOnMobile: true,
+    mobileOrder: 4,
+    desktopSize: { width: 100, height: 100 },
+    mobileSize: { width: 70, height: 70 },
+    type: "mobile",
+  },
+  {
+    key: "photodump station",
+    label: "photodump station",
+    href: "/projects/photodump-station",
+    logo: LogoPhotodump,
+    desktopColumn: 3,
+    desktopOrder: 0,
+    showOnMobile: true,
+    mobileOrder: 3,
+    desktopSize: { width: 115, height: 115 },
+    mobileSize: { width: 70, height: 70 },
+    type: "web",
+  },
+  {
+    key: "panglima",
+    label: "panglima",
+    href: "/projects/panglima",
+    logo: LogoPanglima,
+    desktopColumn: 3,
+    desktopOrder: 1,
+    showOnMobile: true,
+    mobileOrder: 5,
+    desktopSize: { width: 50, height: 50 },
+    mobileSize: { width: 40, height: 40 },
+    type: "web",
+  },
+  {
+    key: "keythicc",
+    label: "keythicc",
+    href: "/projects/keythicc",
+    logo: LogoKeythicc,
+    desktopColumn: 3,
+    desktopOrder: 2,
+    showOnMobile: true,
+    mobileOrder: 6,
+    desktopSize: { width: 100, height: 100 },
+    mobileSize: { width: 70, height: 70 },
+    type: "web",
+  },
+  {
+    key: "si-book",
+    label: "si-book",
+    href: "/projects/si-book",
+    logo: LogoSibook,
+    desktopColumn: 3,
+    desktopOrder: 3,
+    showOnMobile: true,
+    mobileOrder: 7,
+    desktopSize: { width: 100, height: 100 },
+    mobileSize: { width: 70, height: 70 },
+    type: "web",
+  },
+];
 
 export function CreateView() {
   const [currentNav, setCurrentNav] = useState("create");
@@ -25,7 +211,7 @@ export function CreateView() {
   const [animationsReady, setAnimationsReady] = useState(false);
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const imagesLoadedCount = useRef(0);
-  const totalImages = 8; // Total number of logos we're loading
+  const totalImages = PROJECTS.length; // Total number of logos we're loading
 
   // Track image loading completion
   const handleImageLoaded = () => {
@@ -159,6 +345,18 @@ export function CreateView() {
       { label: "create", path: "/" },
       { label: "bio", path: "/bio" },
       { label: "contact", path: "mailto:alifdimasius@gmail.com" },
+      { label: "appa academy", path: "/projects/appa-academy" },
+      { label: "klop", path: "/projects/klop" },
+      { label: "photodump station", path: "/projects/photodump-station" },
+      { label: "finans", path: "/projects/finans" },
+      { label: "drowzee", path: "/projects/drowzee" },
+      { label: "panglima", path: "/projects/panglima" },
+      { label: "keythicc", path: "/projects/keythicc" },
+      { label: "si-book", path: "/projects/si-book" },
+      { label: "petjam", path: "/projects/petjam" },
+      { label: "saturated", path: "/projects/saturated" },
+      { label: "tales of tula", path: "/projects/tales-of-tula" },
+      { label: "edibly", path: "/projects/edibly" },
     ];
 
     // Determine direction based on the current and next nav items
@@ -184,6 +382,18 @@ export function CreateView() {
     create: "/",
     bio: "/bio",
     contact: "mailto:alifdimasius@gmail.com",
+    "appa academy": "/projects/appa-academy",
+    klop: "/projects/klop",
+    "photodump station": "/projects/photodump-station",
+    finans: "/projects/finans",
+    drowzee: "/projects/drowzee",
+    panglima: "/projects/panglima",
+    keythicc: "/projects/keythicc",
+    "si-book": "/projects/si-book",
+    petjam: "/projects/petjam",
+    saturated: "/projects/saturated",
+    "tales of tula": "/projects/tales-of-tula",
+    edibly: "/projects/edibly",
   };
 
   // Animation ready state - only animate when everything is properly loaded
@@ -279,7 +489,7 @@ export function CreateView() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.3 }}
                   >
-                    webs and apps
+                    websites, apps, and games
                   </motion.p>
                 </>
               </motion.div>
@@ -302,9 +512,9 @@ export function CreateView() {
       <AnimatePresence mode="wait" custom={pageDirection}>
         {animationReady && (
           <>
-            {/* Desktop Layout - 4 columns */}
+            {/* Desktop Layout - 4 columns (column 0 has fixed desktop height via grid container) */}
             <motion.div
-              className="hidden lg:grid lg:grid-cols-4 gap-2 w-full text-xs text-gray-500 uppercase mt-2 lg:h-[30rem]"
+              className="hidden lg:grid lg:grid-cols-4 gap-2 w-full text-xs text-gray-500 uppercase mt-2 lg:h-[60rem]"
               initial={{ opacity: 0, y: 50 }}
               animate={{
                 opacity: 1,
@@ -332,356 +542,93 @@ export function CreateView() {
               }}
               custom={pageDirection}
             >
-              <motion.div
-                className="bg-white h-full rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">appa academy</p>
-                <Image
-                  src={LogoAppa.src}
-                  alt="Logo"
-                  width={150}
-                  height={150}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
+              {[0, 1, 2, 3].map((columnIndex) => {
+                const columnProjects = PROJECTS.filter(
+                  (project) => project.desktopColumn === columnIndex
+                ).sort((a, b) => a.desktopOrder - b.desktopOrder);
 
-              <motion.div
-                className="flex flex-col gap-2 h-full"
-                variants={{
-                  hidden: { y: 50, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
-                      },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">klop</p>
-                  <Image
-                    src={LogoKlop.src}
-                    alt="Logo"
-                    width={150}
-                    height={150}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
-                      },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">photodump station</p>
-                  <Image
-                    src={LogoPhotodump.src}
-                    alt="Logo"
-                    width={115}
-                    height={115}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-              </motion.div>
+                if (columnProjects.length === 0) return null;
 
-              <motion.div
-                className="flex flex-col gap-2 h-full"
-                variants={{
-                  hidden: { y: 50, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
-                      },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">drowzee</p>
-                  <Image
-                    src={LogoDrowzee.src}
-                    alt="Logo"
-                    width={90}
-                    height={90}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
-                      },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">finans</p>
-                  <Image
-                    src={LogoFinans.src}
-                    alt="Logo"
-                    width={100}
-                    height={100}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-              </motion.div>
+                // Column 0 keeps a "hero" tile by making its first card taller when multiple items exist.
+                const isHeroColumn = columnIndex === 0;
 
-              <motion.div
-                className="flex flex-col gap-2 h-full"
-                variants={{
-                  hidden: { y: 50, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
+                return (
+                  <motion.div
+                    key={columnIndex}
+                    className="flex flex-col gap-2"
+                    variants={{
+                      hidden: { y: 50, opacity: 0 },
+                      visible: {
+                        y: 0,
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 15,
+                          duration: 0.5,
+                        },
                       },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">panglima ekspres</p>
-                  <Image
-                    src={LogoPanglima.src}
-                    alt="Logo"
-                    width={50}
-                    height={50}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
+                      exit: {
+                        y: -20,
+                        opacity: 0,
+                        transition: { duration: 0.3 },
                       },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">keythicc</p>
-                  <Image
-                    src={LogoKeythicc.src}
-                    alt="Logo"
-                    width={100}
-                    height={100}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-                <motion.div
-                  className="bg-white flex-1 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                  variants={{
-                    hidden: { y: 30, opacity: 0 },
-                    visible: {
-                      y: 0,
-                      opacity: 1,
-                      transition: {
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 15,
-                        duration: 0.5,
-                      },
-                    },
-                    exit: {
-                      y: -20,
-                      opacity: 0,
-                      transition: { duration: 0.3 },
-                    },
-                  }}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                >
-                  <p className="absolute top-2 left-2">si-book</p>
-                  <Image
-                    src={LogoSibook.src}
-                    alt="Logo"
-                    width={100}
-                    height={100}
-                    className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                    onLoad={handleImageLoaded}
-                  />
-                </motion.div>
-              </motion.div>
+                    }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    {columnProjects.map((project, index) => (
+                      <motion.a
+                        key={project.key}
+                        href={project.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavClick(project.key);
+                        }}
+                        className={`bg-white rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center cursor-pointer ${
+                          isHeroColumn && index === 0 ? "flex-[2]" : "flex-1"
+                        }`}
+                        variants={{
+                          hidden: { y: 30, opacity: 0 },
+                          visible: {
+                            y: 0,
+                            opacity: 1,
+                            transition: {
+                              type: "spring",
+                              stiffness: 100,
+                              damping: 15,
+                              duration: 0.5,
+                            },
+                          },
+                          exit: {
+                            y: -20,
+                            opacity: 0,
+                            transition: { duration: 0.3 },
+                          },
+                        }}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                      >
+                        <p className="absolute top-2 left-2">
+                          {project.label === "panglima"
+                            ? "panglima ekspres"
+                            : project.label}
+                        </p>
+                        <Image
+                          src={project.logo.src}
+                          alt="Logo"
+                          width={project.desktopSize.width}
+                          height={project.desktopSize.height}
+                          className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert rounded-2xl"
+                          onLoad={handleImageLoaded}
+                        />
+                      </motion.a>
+                    ))}
+                  </motion.div>
+                );
+              })}
             </motion.div>
 
             {/* Mobile Layout - 2x4 Grid */}
@@ -714,289 +661,50 @@ export function CreateView() {
               }}
               custom={pageDirection}
             >
-              {/* Row 1 */}
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">appa academy</p>
-                <Image
-                  src={LogoAppa.src}
-                  alt="Logo"
-                  width={60}
-                  height={60}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">klop</p>
-                <Image
-                  src={LogoKlop.src}
-                  alt="Logo"
-                  width={80}
-                  height={80}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              {/* Row 2 */}
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">photodump station</p>
-                <Image
-                  src={LogoPhotodump.src}
-                  alt="Logo"
-                  width={70}
-                  height={70}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">drowzee</p>
-                <Image
-                  src={LogoDrowzee.src}
-                  alt="Logo"
-                  width={60}
-                  height={60}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              {/* Row 3 */}
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">finans</p>
-                <Image
-                  src={LogoFinans.src}
-                  alt="Logo"
-                  width={70}
-                  height={70}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">panglima ekspres</p>
-                <Image
-                  src={LogoPanglima.src}
-                  alt="Logo"
-                  width={40}
-                  height={40}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              {/* Row 4 */}
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">keythicc</p>
-                <Image
-                  src={LogoKeythicc.src}
-                  alt="Logo"
-                  width={70}
-                  height={70}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
-
-              <motion.div
-                className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center"
-                variants={{
-                  hidden: { y: 30, opacity: 0 },
-                  visible: {
-                    y: 0,
-                    opacity: 1,
-                    transition: {
-                      type: "spring",
-                      stiffness: 100,
-                      damping: 15,
-                      duration: 0.5,
-                    },
-                  },
-                  exit: {
-                    y: -20,
-                    opacity: 0,
-                    transition: { duration: 0.3 },
-                  },
-                }}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                <p className="absolute top-2 left-2">si-book</p>
-                <Image
-                  src={LogoSibook.src}
-                  alt="Logo"
-                  width={70}
-                  height={70}
-                  className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert"
-                  onLoad={handleImageLoaded}
-                />
-              </motion.div>
+              {PROJECTS.filter((project) => project.showOnMobile)
+                .sort((a, b) => (a.mobileOrder ?? 0) - (b.mobileOrder ?? 0))
+                .map((project) => (
+                  <motion.div
+                    key={project.key}
+                    onClick={() => handleNavClick(project.key)}
+                    className="bg-white h-32 rounded-2xl p-2 hover:bg-black hover:text-white transition-colors duration-500 group relative flex justify-center items-center cursor-pointer"
+                    variants={{
+                      hidden: { y: 30, opacity: 0 },
+                      visible: {
+                        y: 0,
+                        opacity: 1,
+                        transition: {
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 15,
+                          duration: 0.5,
+                        },
+                      },
+                      exit: {
+                        y: -20,
+                        opacity: 0,
+                        transition: { duration: 0.3 },
+                      },
+                    }}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                  >
+                    <p className="absolute top-2 left-2">
+                      {project.label === "panglima"
+                        ? "panglima ekspres"
+                        : project.label}
+                    </p>
+                    <Image
+                      src={project.logo.src}
+                      alt="Logo"
+                      width={project.mobileSize.width}
+                      height={project.mobileSize.height}
+                      className="transition-all duration-500 group-hover:filter group-hover:brightness-0 group-hover:invert rounded-2xl"
+                      onLoad={handleImageLoaded}
+                    />
+                  </motion.div>
+                ))}
             </motion.div>
           </>
         )}
