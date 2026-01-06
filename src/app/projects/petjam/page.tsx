@@ -26,10 +26,16 @@ export default function PetjamPage() {
         alt: "PetJam Logo",
       }}
       descriptionBlocks={descriptionBlocks}
-      projectLink={{
-        ctaLabel: "GitHub Repository",
-        href: "https://github.com/kenanfir/workoutegg",
-      }}
+      projectLinks={[
+        {
+          ctaLabel: "GitHub Repository",
+          href: "https://github.com/kenanfir/workoutegg",
+        },
+        {
+          ctaLabel: "App Store",
+          href: "https://apps.apple.com/us/app/pet-jam/id6757231277",
+        },
+      ]}
       imagesSection={
         <div className="flex gap-8 overflow-x-auto">
           {images.map((image) => (

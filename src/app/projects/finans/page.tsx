@@ -26,10 +26,12 @@ export default function FinansPage() {
         alt: "finans Logo",
       }}
       descriptionBlocks={descriptionBlocks}
-      projectLink={{
-        ctaLabel: "GitHub Repository",
-        href: "https://github.com/alifdimasius/finans",
-      }}
+      projectLinks={[
+        {
+          ctaLabel: "GitHub Repository",
+          href: "https://github.com/alifdimasius/finans",
+        },
+      ]}
       imagesSection={
         <div className="flex gap-4 overflow-x-auto">
           {images.map((image) => (

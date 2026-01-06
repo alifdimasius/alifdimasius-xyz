@@ -14,10 +14,12 @@ export default function KeythiccPage() {
         alt: "Keythicc Logo",
       }}
       descriptionBlocks={descriptionBlocks}
-      projectLink={{
-        ctaLabel: "Live Site",
-        href: "https://keythicc.vercel.app",
-      }}
+      projectLinks={[
+        {
+          ctaLabel: "Live Site",
+          href: "https://keythicc.vercel.app",
+        },
+      ]}
     />
   );
 }

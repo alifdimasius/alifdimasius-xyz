@@ -15,10 +15,12 @@ export default function PanglimaPage() {
         alt: "Panglima Logo",
       }}
       descriptionBlocks={descriptionBlocks}
-      projectLink={{
-        ctaLabel: "Live Site",
-        href: "https://panglimaekspres.com",
-      }}
+      projectLinks={[
+        {
+          ctaLabel: "Live Site",
+          href: "https://panglimaekspres.com",
+        },
+      ]}
     />
   );
 }

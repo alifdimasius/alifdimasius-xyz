@@ -24,10 +24,12 @@ export default function SaturatedPage() {
         alt: "Saturated Logo",
       }}
       descriptionBlocks={descriptionBlocks}
-      projectLink={{
-        ctaLabel: "Mac App Store",
-        href: "https://apps.apple.com/id/app/saturated/id6755347604?mt=12",
-      }}
+      projectLinks={[
+        {
+          ctaLabel: "Mac App Store",
+          href: "https://apps.apple.com/id/app/saturated/id6755347604?mt=12",
+        },
+      ]}
       imagesSection={<ImageCarousel images={images} />}
     />
   );

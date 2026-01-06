@@ -29,7 +29,7 @@ type ProjectContentTemplateProps = {
   descriptionBlocks: string[];
   imagesSection?: ReactNode;
   backLink?: BackLinkConfig;
-  projectLink?: { ctaLabel: string; href: string };
+  projectLinks?: Array<{ ctaLabel: string; href: string }>;
 };
 
 const DEFAULT_BACK_LINK: BackLinkConfig = {
@@ -126,7 +126,7 @@ export function ProjectContentTemplate({
   heroLogo,
   descriptionBlocks,
   imagesSection,
-  projectLink,
+  projectLinks,
   backLink = DEFAULT_BACK_LINK,
 }: ProjectContentTemplateProps) {
   const [currentNav, setCurrentNav] = useState(projectName.toLowerCase());
@@ -309,19 +309,28 @@ export function ProjectContentTemplate({
                 {block}
               </motion.p>
             ))}
-            {projectLink && (
-              <motion.a
-                href={projectLink.href}
-                className="flex items-center uppercase transition-all gap-2 font-semibold text-base md:text-xl lg:text-3xl relative group active:translate-y-1 duration-300"
-                target="_blank"
-                rel="noopener noreferrer"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                <span>{projectLink.ctaLabel}</span>
-                <ArrowUpRight className="w-4 h-4 lg:w-8 lg:h-8 group-hover:translate-x-1 transition-all duration-300" />
-                <div className="absolute bottom-0 left-0 h-1 bg-black rounded-full w-0 group-hover:w-full transition-all duration-300" />
-              </motion.a>
+            {projectLinks && projectLinks.length > 0 && (
+              <div className="flex flex-col items-center gap-4">
+                {projectLinks.map((link, index) => (
+                  <motion.a
+                    key={`${link.href}-${index}`}
+                    href={link.href}
+                    className="flex items-center uppercase transition-all gap-2 font-semibold text-base md:text-xl lg:text-3xl relative group active:translate-y-1 duration-300"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{
+                      delay:
+                        0.2 + descriptionBlocks.length * 0.05 + index * 0.05,
+                    }}
+                  >
+                    <span>{link.ctaLabel}</span>
+                    <ArrowUpRight className="w-4 h-4 lg:w-8 lg:h-8 group-hover:translate-x-1 transition-all duration-300" />
+                    <div className="absolute bottom-0 left-0 h-1 bg-black rounded-full w-0 group-hover:w-full transition-all duration-300" />
+                  </motion.a>
+                ))}
+              </div>
             )}
           </motion.div>
         )}

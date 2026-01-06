@@ -24,7 +24,9 @@ export default function AppaAcademyPage() {
       }}
       descriptionBlocks={descriptionBlocks}
       imagesSection={<ImageCarousel images={images} />}
-      projectLink={{ ctaLabel: "Live Site", href: "https://appa-academy.com" }}
+      projectLinks={[
+        { ctaLabel: "Live Site", href: "https://appa-academy.com" },
+      ]}
     />
   );
 }

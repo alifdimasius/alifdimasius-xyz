@@ -28,7 +28,7 @@ export default function KlopPage() {
           ]}
         />
       }
-      projectLink={{ ctaLabel: "Live Site", href: "https://klop.pu.go.id" }}
+      projectLinks={[{ ctaLabel: "Live Site", href: "https://klop.pu.go.id" }]}
     />
   );
 }
